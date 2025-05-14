@@ -1,6 +1,7 @@
 from base64 import urlsafe_b64encode
 from collections.abc import Iterator
 from hashlib import sha256
+from pathlib import Path
 from random import choice
 from string import ascii_letters, digits
 from urllib.parse import urlencode
@@ -14,6 +15,7 @@ from type_definitions import JSONObject
 
 
 class Client:
+    CACHE_DIR: Path = Path.home() / ".cache" / "spotify-cli"
     CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     REDIRECT_URI: str = "http://127.0.0.1:8080"
     AUTH_URL: str = "https://accounts.spotify.com/authorize"
@@ -58,23 +60,35 @@ class Client:
         return output
 
     def get_auth_code(self) -> None:
-        # TODO: Add some kinda caching for this so it doesn't need to request on every run
         server: AuthServer = AuthServer(Client.REDIRECT_URI)
         webbrowser.open(self.auth_url())
         print("Go to your browser to authenticate")
         server.handle_request()
         self._auth_code: str = server._auth_code
 
-    def get_access_token(self) -> None:
-        if not hasattr(self, "_auth_code"):
-            self.get_auth_code()
-        payload: dict[str, str] = {
-            "client_id": Client.CLIENT_ID,
-            "redirect_uri": Client.REDIRECT_URI,
-            "code": self._auth_code,
-            "code_verifier": self._code_verifier,
-            "grant_type": "authorization_code",
+    @property
+    def cache_path(self) -> Path:
+        Client.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        return Client.CACHE_DIR / "auth.txt"
+
+    def read_cache(self) -> dict[str, str]:
+        if not self.cache_path.is_file():
+            return {}
+        cache: str = self.cache_path.read_text()
+        if len(cache) == 0:
+            return {}
+        return json.loads(cache)
+
+    def write_cache(self, content: dict[str, str]) -> None:
+        if not self.cache_path.is_file():
+            self.cache_path.touch(exist_ok=True)
+        new_cache: dict[str, str] = {
+            **self.read_cache(),
+            **content,
         }
+        self.cache_path.write_text(json.dumps(new_cache))
+
+    def _get_access_token(self, payload: dict[str, str]) -> None:
         response: BaseHTTPResponse = request(
             method="POST",
             url=Client.TOKEN_URL,
@@ -84,7 +98,28 @@ class Client:
         response_data: JSONObject = json.loads(response.data)
         if "access_token" not in response_data:
             raise Exception(f"Authentication failed: {response_data}")
+        self.write_cache({"refresh_token": response_data["refresh_token"]})
         self._access_token: str = response_data["access_token"]
+
+    def get_access_token(self) -> None:
+        cache: dict[str, str] = self.read_cache()
+        if "refresh_token" in cache:
+            payload: dict[str, str] = {
+                "client_id": Client.CLIENT_ID,
+                "grant_type": "refresh_token",
+                "refresh_token": cache["refresh_token"],
+            }
+        else:
+            if not hasattr(self, "_auth_code"):
+                self.get_auth_code()
+            payload: dict[str, str] = {
+                "client_id": Client.CLIENT_ID,
+                "redirect_uri": Client.REDIRECT_URI,
+                "code": self._auth_code,
+                "code_verifier": self._code_verifier,
+                "grant_type": "authorization_code",
+            }
+        self._get_access_token(payload)
 
     @property
     def access_token(self) -> str:
