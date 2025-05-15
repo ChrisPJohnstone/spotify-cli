@@ -9,9 +9,11 @@ import logging
 from ._base import Command
 from .get_top_artists import GetTopArtists
 from .get_top_tracks import GetTopTracks
+from .logout import LogOut
 from src.parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
+    "logout": LogOut,
     "top-artists": GetTopArtists,
     "top-tracks": GetTopTracks,
 }

@@ -68,6 +68,11 @@ class Spotify:
         Spotify.CACHE_DIR.mkdir(parents=True, exist_ok=True)
         return Spotify.CACHE_DIR / "auth.txt"
 
+    def clear_cache(self) -> None:
+        if not self.cache_path.is_file():
+            return
+        self.cache_path.unlink()
+
     def read_cache(self) -> dict[str, str]:
         if not self.cache_path.is_file():
             return {}
