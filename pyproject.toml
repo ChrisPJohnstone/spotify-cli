@@ -1,3 +1,25 @@
+[project]
+name = "spotify-cli"
+version = "0.1"
+description = "CLI spotify controller"
+readme = "README.md"
+requires-python = ">=3.13.0"
+  
+  [[project.authors]]
+  name = "Christopher Johnstone"
+
+  [[project.authors]]
+  name = "Christopher Johnstone"
+  email = "chrispjohnstone97@gmail.com"
+
+  [project.scripts]
+  spot = "src.scripts:main"
+
+[tool.setuptools.packages.find]
+include = ["*"]
+exclude = ["*tests*"]
+namespaces = true
+
 [tool.black]
 line-length = 80
 target-version = ['py313']

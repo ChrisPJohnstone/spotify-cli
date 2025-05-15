@@ -2,7 +2,7 @@
 from argparse import ArgumentParser, Namespace
 import logging
 
-from spotify import Spotify
+from src.spotify import Spotify
 
 
 def main() -> None:
