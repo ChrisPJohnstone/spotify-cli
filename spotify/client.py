@@ -14,7 +14,7 @@ from .auth_server import AuthServer
 from type_definitions import JSONObject
 
 
-class Client:
+class Spotify:
     CACHE_DIR: Path = Path.home() / ".cache" / "spotify-cli"
     CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     REDIRECT_URI: str = "http://127.0.0.1:8080"
@@ -48,19 +48,19 @@ class Client:
         if not hasattr(self, "_code_challenge"):
             self.generate_code_challenge()
         payload: dict[str, str] = {
-            "client_id": Client.CLIENT_ID,
-            "redirect_uri": Client.REDIRECT_URI,
+            "client_id": Spotify.CLIENT_ID,
+            "redirect_uri": Spotify.REDIRECT_URI,
             "code_challenge": self._code_challenge,
             "code_challenge_method": 'S256',
             "response_type": "code",
-            "scope": " ".join(Client.SCOPE),
+            "scope": " ".join(Spotify.SCOPE),
         }
-        output: str = f"{Client.AUTH_URL}?{urlencode(payload)}"
+        output: str = f"{Spotify.AUTH_URL}?{urlencode(payload)}"
         logging.debug(f"Auth url: {output}")
         return output
 
     def get_auth_code(self) -> None:
-        server: AuthServer = AuthServer(Client.REDIRECT_URI)
+        server: AuthServer = AuthServer(Spotify.REDIRECT_URI)
         webbrowser.open(self.auth_url())
         print("Go to your browser to authenticate")
         server.handle_request()
@@ -68,8 +68,8 @@ class Client:
 
     @property
     def cache_path(self) -> Path:
-        Client.CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        return Client.CACHE_DIR / "auth.txt"
+        Spotify.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        return Spotify.CACHE_DIR / "auth.txt"
 
     def read_cache(self) -> dict[str, str]:
         if not self.cache_path.is_file():
@@ -91,7 +91,7 @@ class Client:
     def _get_access_token(self, payload: dict[str, str]) -> None:
         response: BaseHTTPResponse = request(
             method="POST",
-            url=Client.TOKEN_URL,
+            url=Spotify.TOKEN_URL,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             body=urlencode(payload),
         )
@@ -105,7 +105,7 @@ class Client:
         cache: dict[str, str] = self.read_cache()
         if "refresh_token" in cache:
             payload: dict[str, str] = {
-                "client_id": Client.CLIENT_ID,
+                "client_id": Spotify.CLIENT_ID,
                 "grant_type": "refresh_token",
                 "refresh_token": cache["refresh_token"],
             }
@@ -113,8 +113,8 @@ class Client:
             if not hasattr(self, "_auth_code"):
                 self.get_auth_code()
             payload: dict[str, str] = {
-                "client_id": Client.CLIENT_ID,
-                "redirect_uri": Client.REDIRECT_URI,
+                "client_id": Spotify.CLIENT_ID,
+                "redirect_uri": Spotify.REDIRECT_URI,
                 "code": self._auth_code,
                 "code_verifier": self._code_verifier,
                 "grant_type": "authorization_code",
@@ -126,7 +126,7 @@ class Client:
         return self._access_token
 
     def _request(self, method: str, url: str, attempts: int = 0) -> JSONObject:
-        if attempts == Client.MAX_ATTEMPTS:
+        if attempts == Spotify.MAX_ATTEMPTS:
             raise Exception(f"Reached max attempts for {method} {url}")
         response: BaseHTTPResponse = request(
             method=method,
@@ -139,7 +139,7 @@ class Client:
         return json.loads(response.data)
 
     def get_top_tracks(self) -> Iterator[JSONObject]:
-        url: str = f"{Client.BASE_URL}me/top/tracks"
+        url: str = f"{Spotify.BASE_URL}me/top/tracks"
         response: JSONObject = self._request("GET", url)
         for item in response["items"]:
             yield item

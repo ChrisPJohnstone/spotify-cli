@@ -2,11 +2,11 @@
 from argparse import ArgumentParser, Namespace
 import logging
 
-from spotify import Client as SpotifyClient
+from spotify import Spotify
 
 
 def main() -> None:
-    client: SpotifyClient = SpotifyClient()
+    client: Spotify = Spotify()
     for track in client.get_top_tracks():
         artists: list[str] = [artist["name"] for artist in track["artists"]]
         print("".join(artists), track["name"])
