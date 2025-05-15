@@ -1,4 +1,9 @@
-from argparse import _SubParsersAction, ArgumentParser, Namespace
+from argparse import (
+    ArgumentParser,
+    Namespace,
+    RawTextHelpFormatter,
+    _SubParsersAction,
+)
 import logging
 
 from .base import Command
@@ -14,6 +19,7 @@ def main() -> None:
     shared: list[ArgumentParser] = [parser() for parser in SHARED]
     parser: ArgumentParser = ArgumentParser(
         description="Spotify CLI Interface (very unfinished)",
+        formatter_class=RawTextHelpFormatter,
         parents=shared,
     )
     subparsers: _SubParsersAction = parser.add_subparsers(
@@ -25,6 +31,7 @@ def main() -> None:
     for name, command in COMMANDS.items():
         subparsers.add_parser(
             name=name,
+            formatter_class=RawTextHelpFormatter,
             parents=[*shared, *command.parent_parsers()],
         )
     args: Namespace = parser.parse_args()

@@ -147,8 +147,6 @@ class Spotify:
         limit: int = 20,
         offset: int = 0,
     ) -> Iterator[JSONObject]:
-        if not 0 <= limit <= 50:
-            raise ValueError(f"Limit {limit} must be 0-50")
         params: dict[str, str | int] = {
             "time_range": term,
             "limit": limit,

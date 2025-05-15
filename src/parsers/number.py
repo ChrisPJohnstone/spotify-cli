@@ -6,6 +6,7 @@ def number(default: int, help_string: str) -> ArgumentParser:
     parser.add_argument(
         "-n",
         "--number",
+        metavar="number",
         type=int,
         default=default,
         help=f"{help_string} (Default: {default})",
