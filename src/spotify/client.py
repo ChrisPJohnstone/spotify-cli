@@ -27,9 +27,6 @@ class Spotify:
         "user-top-read",
     ]
 
-    def __init__(self) -> None:
-        self.get_access_token()
-
     def generate_code_verifier(self, length: int = 128) -> None:
         letters: str = ascii_letters + digits
         constructor: list[str] = [choice(letters) for _ in range(length)]
@@ -121,25 +118,44 @@ class Spotify:
             }
         self._get_access_token(payload)
 
-    @property
-    def access_token(self) -> str:
-        return self._access_token
-
-    def _request(self, method: str, url: str, attempts: int = 0) -> JSONObject:
+    def _request(
+        self,
+        method: str,
+        url: str,
+        body: bytes | str | None = None,
+        attempts: int = 0,
+    ) -> bytes:
         if attempts == Spotify.MAX_ATTEMPTS:
             raise Exception(f"Reached max attempts for {method} {url}")
+        if not hasattr(self, "_access_token"):
+            self.get_access_token()
         response: BaseHTTPResponse = request(
             method=method,
             url=url,
-            headers={"Authorization": f"Bearer {self.access_token}"},
+            body=body,
+            headers={"Authorization": f"Bearer {self._access_token}"},
         )
         if response.status == 403:
+            logging.debug("403 response from {url}, refreshing access token")
             self.get_access_token()
-            return self._request(method, url, attempts + 1)
-        return json.loads(response.data)
+            return self._request(method, url, attempts=attempts + 1)
+        return response.data
 
-    def get_top_tracks(self) -> Iterator[JSONObject]:
-        url: str = f"{Spotify.BASE_URL}me/top/tracks"
-        response: JSONObject = self._request("GET", url)
-        for item in response["items"]:
-            yield item
+    def get_top_tracks(
+        self,
+        term: str = "medium_term",
+        limit: int = 20,
+        offset: int = 0,
+    ) -> Iterator[JSONObject]:
+        if not 0 <= limit <= 50:
+            raise ValueError(f"Limit {limit} must be 0-50")
+        params: dict[str, str | int] = {
+            "time_range": term,
+            "limit": limit,
+            "offset": offset,
+        }
+        url: str = f"{Spotify.BASE_URL}me/top/tracks?{urlencode(params)}"
+        response: bytes = self._request("GET", url)
+        tracks: JSONObject = json.loads(response)
+        for track in tracks["items"]:
+            yield track
