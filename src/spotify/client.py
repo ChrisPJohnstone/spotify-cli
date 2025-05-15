@@ -147,7 +147,7 @@ class Spotify:
         term: str = "medium_term",
         limit: int = 20,
         offset: int = 0,
-    ) -> Iterator[JSONObject]:
+    ) -> Iterator[tuple[int, JSONObject]]:
         params: dict[str, str | int] = {
             "time_range": term,
             "limit": limit,
@@ -156,5 +156,6 @@ class Spotify:
         url: str = f"{Spotify.BASE_URL}me/top/{item_type}?{urlencode(params)}"
         response: bytes = self._request("GET", url)
         tracks: JSONObject = json.loads(response)
-        for track in tracks["items"]:
-            yield track
+        rank: int = offset + 1
+        for n, item in enumerate(tracks["items"]):
+            yield rank + n, item

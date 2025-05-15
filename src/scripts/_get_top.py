@@ -12,6 +12,7 @@ class GetTop(Command):
     DEFAULT_LIMIT: int = 20
     DEFAULT_OFFSET: int = 0
     DEFAULT_TERM: str = "medium_term"
+    MAX_PER_REQUEST: int = 50
 
     @staticmethod
     def parent_parsers() -> list[ArgumentParser]:
@@ -28,11 +29,17 @@ class GetTop(Command):
     def __init__(self, args: Namespace) -> None:
         pass
 
-    def _results(self, args: Namespace, item_type: str) -> Iterator[JSONObject]:
+    def _results(
+        self,
+        args: Namespace,
+        item_type: str,
+    ) -> Iterator[tuple[int, JSONObject]]:
         client: Spotify = Spotify()
-        yield from client.get_top(
-            item_type=item_type,
-            term=args.term,
-            limit=args.number,
-            offset=args.offset,
-        )
+        for n in range(
+            args.offset,
+            args.number + args.offset,
+            GetTop.MAX_PER_REQUEST,
+        ):
+            remaining: int = args.number + args.offset - n
+            limit: int = min(remaining, GetTop.MAX_PER_REQUEST)
+            yield from client.get_top(item_type, args.term, limit, n)

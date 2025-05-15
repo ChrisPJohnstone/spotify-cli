@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 
-def term(default: int, help_string: str) -> ArgumentParser:
+def term(default: str, help_string: str) -> ArgumentParser:
     parser: ArgumentParser = ArgumentParser(add_help=False)
     parser.add_argument(
         "--term",
