@@ -51,7 +51,7 @@ class Spotify:
             "client_id": Spotify.CLIENT_ID,
             "redirect_uri": Spotify.REDIRECT_URI,
             "code_challenge": self._code_challenge,
-            "code_challenge_method": 'S256',
+            "code_challenge_method": "S256",
             "response_type": "code",
             "scope": " ".join(Spotify.SCOPE),
         }

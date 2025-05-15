@@ -18,7 +18,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         return self.wfile.write(text.encode("UTF-8"))
 
 
-
 class AuthServer(HTTPServer):
     def __init__(self, uri: str) -> None:
         uri_parts: tuple[str, str, int] = split_uri(uri)
@@ -29,5 +28,3 @@ class AuthServer(HTTPServer):
     @property
     def auth_code(self) -> str:
         return self._auth_code
-
-
