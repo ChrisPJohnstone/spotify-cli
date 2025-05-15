@@ -6,11 +6,13 @@ from argparse import (
 )
 import logging
 
-from .base import Command
+from ._base import Command
+from .get_top_artists import GetTopArtists
 from .get_top_tracks import GetTopTracks
 from src.parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
+    "top-artists": GetTopArtists,
     "top-tracks": GetTopTracks,
 }
 
@@ -26,6 +28,7 @@ def main() -> None:
         title="command",
         dest="command",
         metavar="<command>",
+        help=f"One of:\n- {'\n- '.join(COMMANDS.keys())}",
         required=True,
     )
     for name, command in COMMANDS.items():

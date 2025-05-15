@@ -141,8 +141,9 @@ class Spotify:
             return self._request(method, url, attempts=attempts + 1)
         return response.data
 
-    def get_top_tracks(
+    def get_top(
         self,
+        item_type: str,
         term: str = "medium_term",
         limit: int = 20,
         offset: int = 0,
@@ -152,7 +153,7 @@ class Spotify:
             "limit": limit,
             "offset": offset,
         }
-        url: str = f"{Spotify.BASE_URL}me/top/tracks?{urlencode(params)}"
+        url: str = f"{Spotify.BASE_URL}me/top/{item_type}?{urlencode(params)}"
         response: bytes = self._request("GET", url)
         tracks: JSONObject = json.loads(response)
         for track in tracks["items"]:
