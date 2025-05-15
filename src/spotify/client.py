@@ -71,11 +71,13 @@ class Spotify:
     def clear_cache(self) -> None:
         if not self.cache_path.is_file():
             return
+        logging.debug(f"Deleting {self.cache_path}")
         self.cache_path.unlink()
 
     def read_cache(self) -> dict[str, str]:
         if not self.cache_path.is_file():
             return {}
+        logging.debug(f"Reading {self.cache_path}")
         cache: str = self.cache_path.read_text()
         if len(cache) == 0:
             return {}
@@ -84,6 +86,7 @@ class Spotify:
     def write_cache(self, content: dict[str, str]) -> None:
         if not self.cache_path.is_file():
             self.cache_path.touch(exist_ok=True)
+        logging.debug(f"Updating {self.cache_path} with {content}")
         new_cache: dict[str, str] = {
             **self.read_cache(),
             **content,
@@ -91,6 +94,7 @@ class Spotify:
         self.cache_path.write_text(json.dumps(new_cache))
 
     def _get_access_token(self, payload: dict[str, str]) -> None:
+        logging.debug(f"Requesting new access token with payload {payload}")
         response: BaseHTTPResponse = request(
             method="POST",
             url=Spotify.TOKEN_URL,
@@ -134,6 +138,7 @@ class Spotify:
             raise Exception(f"Reached max attempts for {method} {url}")
         if not hasattr(self, "_access_token"):
             self.get_access_token()
+        logging.debug(f"Sending {method} request to {url} with {body}")
         response: BaseHTTPResponse = request(
             method=method,
             url=url,

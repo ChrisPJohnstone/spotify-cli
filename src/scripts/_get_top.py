@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from argparse import ArgumentParser, Namespace
 from collections.abc import Iterator
+import logging
 
 from ._base import Command
 from src.parsers import number, offset, term
@@ -42,4 +43,5 @@ class GetTop(Command):
         ):
             remaining: int = args.number + args.offset - n
             limit: int = min(remaining, GetTop.MAX_PER_REQUEST)
+            logging.debug(f"Requesting {item_type} {n}-{limit}")
             yield from client.get_top(item_type, args.term, limit, n)
