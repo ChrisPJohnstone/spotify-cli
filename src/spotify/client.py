@@ -169,3 +169,15 @@ class Spotify:
         rank: int = offset + 1
         for n, item in enumerate(tracks["items"]):
             yield rank + n, item
+
+    def get_saved_tracks(
+        self,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> Iterator[JSONObject]:
+        params: dict[str, int] = {"limit": limit, "offset": offset}
+        url: str = f"{Spotify.BASE_URL}me/tracks?{urlencode(params)}"
+        response: bytes = self._request("GET", url)
+        tracks: JSONObject = json.loads(response)
+        for item in tracks["items"]:
+            yield item
