@@ -1,7 +1,6 @@
 # Overview
 
-CLI interface for Spotify with minimal dependencies (Full list):
-- [urllib3](https://pypi.org/project/urllib3/)
+CLI interface for Spotify using only python standard library.
 
 Uses [PKCE Authorization Flow](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow)
 

@@ -1,11 +1,12 @@
 from base64 import urlsafe_b64encode
 from collections.abc import Iterator
 from hashlib import sha256
+from http.client import HTTPResponse
 from pathlib import Path
 from random import choice
 from string import ascii_letters, digits
 from urllib.parse import urlencode
-from urllib3 import BaseHTTPResponse, request
+from urllib.request import Request, urlopen
 import json
 import logging
 import webbrowser
@@ -95,13 +96,14 @@ class Spotify:
 
     def _get_access_token(self, payload: dict[str, str]) -> None:
         logging.debug(f"Requesting new access token with payload {payload}")
-        response: BaseHTTPResponse = request(
+        request: Request = Request(
             method="POST",
             url=Spotify.TOKEN_URL,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
-            body=urlencode(payload),
+            data=urlencode(payload).encode(),
         )
-        response_data: JSONObject = json.loads(response.data)
+        response: HTTPResponse = urlopen(request)
+        response_data: JSONObject = json.loads(response.read())
         if "access_token" not in response_data:
             raise Exception(f"Authentication failed: {response_data}")
         self.write_cache({"refresh_token": response_data["refresh_token"]})
@@ -139,17 +141,18 @@ class Spotify:
         if not hasattr(self, "_access_token"):
             self.get_access_token()
         logging.debug(f"Sending {method} request to {url} with {body}")
-        response: BaseHTTPResponse = request(
+        request: Request = Request(
             method=method,
             url=url,
-            body=body,
+            data=body.encode() if isinstance(body, str) else body,
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
+        response: HTTPResponse = urlopen(request)
         if response.status == 403:
             logging.debug("403 response from {url}, refreshing access token")
             self.get_access_token()
             return self._request(method, url, attempts=attempts + 1)
-        return response.data
+        return response.read()
 
     def get_top(
         self,
