@@ -71,8 +71,8 @@ init_tests: TestSet = {
         "expected_get_saved_tracks_calls": [call(100, 50)],
         "expected_logging_calls": [call.debug("Requesting 50-150")],
         "expected_print_calls": [
-            call("XXX ft. U2 by (Kendrick Lamar, U2) added 2025-01-01"),
-            call("Human by (Rag'n'Bone Man) added 2024-12-31"),
+            call(f"{'XXX ft. U2':<50}{'Kendrick Lamar, U2':<50}2025-01-01"),
+            call(f"{'Human':<50}{'Rag\'n\'Bone Man':<50}2024-12-31"),
         ],
     },
     "scrolling": {
@@ -110,8 +110,8 @@ init_tests: TestSet = {
             call.debug("Requesting 8-9"),
         ],
         "expected_print_calls": [
-            call("XXX ft. U2 by (Kendrick Lamar, U2) added 2025-01-01"),
-            call("Human by (Rag'n'Bone Man) added 2024-12-31"),
+            call(f"{'XXX ft. U2':<50}{'Kendrick Lamar, U2':<50}2025-01-01"),
+            call(f"{'Human':<50}{'Rag\'n\'Bone Man':<50}2024-12-31"),
         ],
     },
 }

@@ -32,7 +32,7 @@ class GetSavedTracks(Command):
             track: JSONObject = item["track"]
             artists: list[str] = [artist["name"] for artist in track["artists"]]
             name: str = track["name"]
-            print(f"{name} by ({', '.join(artists)}) added {added_at}")
+            print(f"{name:<50}{', '.join(artists):<50}{added_at}")
 
     def _results(self) -> Iterator[JSONObject]:
         client: Spotify = Spotify()
