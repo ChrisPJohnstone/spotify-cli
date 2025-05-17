@@ -32,10 +32,9 @@ def main() -> None:
         parents=[parser(True) for parser in SHARED],
     )
     subparsers: _SubParsersAction = parser.add_subparsers(
-        title="command",
+        title="commands",
         dest="command",
-        metavar="<command>",
-        help=f"One of:\n- {'\n- '.join(COMMANDS.keys())}",
+        metavar=f"{'\n  '.join(COMMANDS.keys())}",
         required=True,
     )
     shared: list[ArgumentParser] = [parser() for parser in SHARED]
