@@ -41,5 +41,5 @@ class GetSavedTracks(Command):
         ):
             remaining: int = self._args.number + self._args.offset - n
             limit: int = min(remaining, GetSavedTracks.MAX_PER_REQUEST)
-            logging.debug(f"Requesting {n}-{limit}")
+            logging.debug(f"Requesting {n}-{n + limit}")
             yield from client.get_saved_tracks(limit, n)
