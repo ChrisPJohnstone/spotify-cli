@@ -26,11 +26,10 @@ COMMANDS: dict[str, type[Command]] = {
 
 
 def main() -> None:
-    shared: list[ArgumentParser] = [parser() for parser in SHARED]
     parser: ArgumentParser = ArgumentParser(
         description="Spotify CLI Interface (very unfinished)",
         formatter_class=RawTextHelpFormatter,
-        parents=shared,
+        parents=[parser(True) for parser in SHARED],
     )
     subparsers: _SubParsersAction = parser.add_subparsers(
         title="command",
@@ -39,6 +38,7 @@ def main() -> None:
         help=f"One of:\n- {'\n- '.join(COMMANDS.keys())}",
         required=True,
     )
+    shared: list[ArgumentParser] = [parser() for parser in SHARED]
     for name, command in COMMANDS.items():
         subparsers.add_parser(
             name=name,
