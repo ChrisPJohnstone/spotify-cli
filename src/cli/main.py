@@ -27,6 +27,7 @@ COMMANDS: dict[str, type[Command]] = {
 
 def main() -> None:
     parser: ArgumentParser = ArgumentParser(
+        prog="spotify",
         description="Spotify CLI Interface (very unfinished)",
         formatter_class=RawTextHelpFormatter,
         parents=[parser(True) for parser in SHARED],
@@ -36,12 +37,14 @@ def main() -> None:
         title="commands",
         dest="command",
         metavar=f"{'\n  '.join(COMMANDS.keys())}",
+        # TODO: Add help strings to this
         required=True,
     )
     shared: list[ArgumentParser] = [parser() for parser in SHARED]
     for name, command in COMMANDS.items():
         subparsers.add_parser(
             name=name,
+            prog=f"spotify {name}",
             formatter_class=RawTextHelpFormatter,
             parents=[*shared, *command.parent_parsers()],
         )
