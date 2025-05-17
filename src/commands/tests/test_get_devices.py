@@ -17,33 +17,40 @@ init_tests: TestSet = {
     "single": {
         "devices": [
             {
+                "id": "u-u-id",
                 "name": "Living Room Speaker",
                 "is_active": False,
                 "is_private_session": False,
             },
         ],
         "expected_print_calls": [
-            call(f"{'Name':<30}{'is_active':<15}{'is_private_session'}"),
-            call(f"{'Living Room Speaker':<30}{'0':<15}0"),
+            call(
+                f"{'name':<30}{'is_active':<15}{'is_private_session':<20}device_id"
+            ),
+            call(f"{'Living Room Speaker':<30}{'0':<15}{'0':<20}u-u-id"),
         ],
     },
     "multi": {
         "devices": [
             {
+                "id": "foo",
                 "name": "Living Room Speaker",
                 "is_active": False,
                 "is_private_session": False,
             },
             {
+                "id": "bar",
                 "name": "Kitchen Speaker",
                 "is_active": True,
                 "is_private_session": True,
             },
         ],
         "expected_print_calls": [
-            call(f"{'Name':<30}{'is_active':<15}{'is_private_session'}"),
-            call(f"{'Living Room Speaker':<30}{'0':<15}0"),
-            call(f"{'Kitchen Speaker':<30}{'1':<15}1"),
+            call(
+                f"{'name':<30}{'is_active':<15}{'is_private_session':<20}device_id"
+            ),
+            call(f"{'Living Room Speaker':<30}{'0':<15}{'0':<20}foo"),
+            call(f"{'Kitchen Speaker':<30}{'1':<15}{'1':<20}bar"),
         ],
     },
 }
