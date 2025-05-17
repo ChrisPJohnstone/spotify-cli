@@ -1,7 +1,6 @@
-from argparse import ArgumentParser
 from collections.abc import Callable
-from typing import Optional
 
+from .device import device
 from .number import number
 from .offset import offset
 from .term import term

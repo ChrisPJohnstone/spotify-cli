@@ -180,9 +180,7 @@ class Spotify:
         try:
             return self._request(method, url, body, attempts)
         except HTTPError:
-            raise NotImplementedError(
-                "No session found: tool can only manipulate existing sessions"
-            )
+            raise NotImplementedError("Device not found: Please specify device")
 
     def get_top(
         self,
@@ -218,10 +216,16 @@ class Spotify:
         response: bytes = self._request("GET", url)
         yield from json.loads(response)["devices"]
 
-    def previous(self) -> bytes:
-        url: str = Spotify._url("me/player/previous")
+    def previous(self, device_id: str | None = None) -> bytes:
+        params: dict[str, str] = {}
+        if device_id is not None:
+            params["device_id"] = device_id
+        url: str = Spotify._url("me/player/next", params)
         return self._player_request("POST", url)
 
-    def next(self) -> bytes:
-        url: str = Spotify._url("me/player/next")
+    def next(self, device_id: str | None = None) -> bytes:
+        params: dict[str, str] = {}
+        if device_id is not None:
+            params["device_id"] = device_id
+        url: str = Spotify._url("me/player/next", params)
         return self._player_request("POST", url)

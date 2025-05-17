@@ -98,7 +98,7 @@ results_tests: TestSet = {
 @patch.object(GetTop, "item_type", new_callable=PropertyMock)
 @patch.object(GetTop, "args", new_callable=PropertyMock)
 @patch.object(GetTop, "__init__", new=MagicMock(return_value=None))
-@patch(f"{FILEPATH}.GetTop.__abstractmethods__", set())
+@patch.object(GetTop, "__abstractmethods__", set())
 @parametrize(results_tests)
 def test_results(
     mock_args: PropertyMock,

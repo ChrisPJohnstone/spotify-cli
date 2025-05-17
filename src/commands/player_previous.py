@@ -1,15 +1,18 @@
 from argparse import ArgumentParser, Namespace
 
-from ._base import Command
+from ._player import Player
+from src.parsers import device
 from src.spotify import Spotify
 
 
-class PlayerPrevious(Command):
+class PlayerPrevious(Player):
     DESCRIPTION: str = "Move to the previous song in queue"
 
     @staticmethod
     def parent_parsers() -> list[ArgumentParser]:
-        return []
+        return [device()]
 
-    def __init__(self, _: Namespace) -> None:
-        Spotify().previous()
+    def __init__(self, args: Namespace) -> None:
+        self._args: Namespace = args
+        self._client: Spotify = Spotify()
+        self._client.previous(self.get_device())
