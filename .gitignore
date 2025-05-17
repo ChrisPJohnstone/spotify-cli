@@ -3,3 +3,6 @@ __pycache__/
 *.py[cod]
 build
 *\.egg-info
+
+# Testing
+*coverage*
