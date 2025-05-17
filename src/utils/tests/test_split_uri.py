@@ -1,4 +1,4 @@
-from src.utils import split_uri
+from utils import split_uri
 from test_utils import TestSet, parametrize
 
 

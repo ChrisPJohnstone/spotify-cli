@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, PropertyMock, patch
 
 from pytest import raises
 
-from src.commands._player import Player
+from commands._player import Player
 from test_utils import TestSet, parametrize
 
 

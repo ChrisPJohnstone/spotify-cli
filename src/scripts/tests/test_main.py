@@ -2,10 +2,10 @@ from argparse import Namespace, RawTextHelpFormatter
 from logging import DEBUG
 from unittest.mock import _Call, ANY, MagicMock, call, patch
 
-from src.__main__ import main
+from scripts import main
 from test_utils import TestSet, parametrize
 
-FILEPATH: str = "src.__main__"
+FILEPATH: str = "scripts.main"
 
 
 main_tests: TestSet = {

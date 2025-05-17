@@ -3,9 +3,9 @@ from collections.abc import Iterator
 import logging
 
 from ._base import Command
-from src.parsers import number, offset
-from src.spotify import Spotify
-from src.type_definitions import JSONObject
+from parsers import number, offset
+from spotify import Spotify
+from type_definitions import JSONObject
 
 
 class GetSavedTracks(Command):

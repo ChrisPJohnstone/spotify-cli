@@ -1,7 +1,7 @@
 from argparse import Namespace
 
 from ._base import Command
-from src.spotify import Spotify
+from spotify import Spotify
 
 
 class Player(Command):

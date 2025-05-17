@@ -1,8 +1,8 @@
 from argparse import ArgumentParser, Namespace
 
 from ._player import Player
-from src.parsers import device
-from src.spotify import Spotify
+from parsers import device
+from spotify import Spotify
 
 
 class PlayerPrevious(Player):

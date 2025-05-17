@@ -4,9 +4,9 @@ from collections.abc import Iterator
 import logging
 
 from ._base import Command
-from src.parsers import number, offset, term
-from src.spotify import Spotify
-from src.type_definitions import JSONObject
+from parsers import number, offset, term
+from spotify import Spotify
+from type_definitions import JSONObject
 
 
 class GetTop(Command):

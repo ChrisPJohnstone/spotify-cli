@@ -1,4 +1,4 @@
-from src.parsers import device
+from parsers import device
 from test_utils import TestSet, parametrize
 
 

@@ -1,4 +1,4 @@
-from src.parsers import number
+from parsers import number
 from test_utils import TestSet, parametrize
 
 

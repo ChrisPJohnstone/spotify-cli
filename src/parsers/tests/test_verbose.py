@@ -1,4 +1,4 @@
-from src.parsers import verbose
+from parsers import verbose
 from test_utils import TestSet, parametrize
 
 

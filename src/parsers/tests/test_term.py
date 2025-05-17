@@ -1,6 +1,6 @@
 from pytest import raises
 
-from src.parsers import term
+from parsers import term
 from test_utils import TestSet, parametrize
 
 

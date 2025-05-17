@@ -1,9 +1,9 @@
 from argparse import Namespace
 from unittest.mock import MagicMock, call, patch
 
-from src.commands import LogOut
+from commands import LogOut
 
-FILEPATH: str = "src.commands.logout"
+FILEPATH: str = "commands.logout"
 
 
 def test_parent_parsers() -> None:

@@ -1,11 +1,11 @@
 from argparse import Namespace
 from unittest.mock import _Call, MagicMock, PropertyMock, call, patch
 
-from src.commands import GetSavedTracks
-from src.type_definitions import JSONObject
+from commands import GetSavedTracks
+from type_definitions import JSONObject
 from test_utils import TestSet, parametrize
 
-FILEPATH: str = "src.commands.get_saved_tracks"
+FILEPATH: str = "commands.get_saved_tracks"
 
 
 parent_parsers_tests: TestSet = {

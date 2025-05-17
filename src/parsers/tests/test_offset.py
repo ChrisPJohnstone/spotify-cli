@@ -1,4 +1,4 @@
-from src.parsers import offset
+from parsers import offset
 from test_utils import TestSet, parametrize
 
 

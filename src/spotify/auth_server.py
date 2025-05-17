@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qsl, urlparse
 
-from src.utils import split_uri
+from utils import split_uri
 
 
 class RequestHandler(BaseHTTPRequestHandler):

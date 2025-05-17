@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 
 from ._base import Command
-from src.spotify import Spotify
+from spotify import Spotify
 
 
 class GetDevices(Command):

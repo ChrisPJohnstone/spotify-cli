@@ -1,8 +1,8 @@
 from argparse import Namespace
 from unittest.mock import _Call, MagicMock, call, patch
 
-from src.commands import GetTopTracks
-from src.type_definitions import JSONObject
+from commands import GetTopTracks
+from type_definitions import JSONObject
 from test_utils import TestSet, parametrize
 
 

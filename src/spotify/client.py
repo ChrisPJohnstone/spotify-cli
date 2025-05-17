@@ -13,7 +13,7 @@ import logging
 import webbrowser
 
 from .auth_server import AuthServer
-from src.type_definitions import JSONObject
+from type_definitions import JSONObject
 
 
 class Spotify:

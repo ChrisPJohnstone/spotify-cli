@@ -1,10 +1,10 @@
 from argparse import Namespace
 from unittest.mock import MagicMock, call, patch
 
-from src.commands import PlayerNext
+from commands import PlayerNext
 from test_utils import TestSet, parametrize
 
-FILEPATH: str = "src.commands.player_next"
+FILEPATH: str = "commands.player_next"
 
 
 @patch(f"{FILEPATH}.device")

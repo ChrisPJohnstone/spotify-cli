@@ -1,11 +1,11 @@
 from argparse import Namespace
 from unittest.mock import _Call, MagicMock, PropertyMock, call, patch
 
-from src.commands._get_top import GetTop
-from src.type_definitions import JSONObject
+from commands._get_top import GetTop
+from type_definitions import JSONObject
 from test_utils import TestSet, parametrize
 
-FILEPATH: str = "src.commands._get_top"
+FILEPATH: str = "commands._get_top"
 
 type ResultsReturn = tuple[int, JSONObject]
 

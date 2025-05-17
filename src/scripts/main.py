@@ -6,7 +6,7 @@ from argparse import (
 )
 from logging import DEBUG, basicConfig
 
-from src.commands import (
+from commands import (
     Command,
     GetDevices,
     GetSavedTracks,
@@ -16,7 +16,7 @@ from src.commands import (
     PlayerNext,
     PlayerPrevious,
 )
-from src.parsers import SHARED
+from parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
     "devices": GetDevices,
@@ -66,7 +66,3 @@ def main() -> None:
     if getattr(args, "verbose", False):
         basicConfig(level=DEBUG)
     COMMANDS[args.command](args)
-
-
-if __name__ == "__main__":  # pragma: no cover
-    main()
