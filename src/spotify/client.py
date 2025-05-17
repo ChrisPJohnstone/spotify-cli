@@ -7,6 +7,7 @@ from random import choice
 from string import ascii_letters, digits
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 import json
 import logging
 import webbrowser
@@ -168,6 +169,20 @@ class Spotify:
             return self._request(method, url, attempts=attempts + 1)
         return response.read()
 
+    def _player_request(
+        self,
+        method: str,
+        url: str,
+        body: bytes | str | None = None,
+        attempts: int = 0,
+    ) -> bytes:
+        try:
+            return self._request(method, url, body, attempts)
+        except HTTPError:
+            raise NotImplementedError(
+                "No session found: tool can only manipulate existing sessions"
+            )
+
     def get_top(
         self,
         item_type: str,
@@ -201,8 +216,8 @@ class Spotify:
 
     def previous(self) -> bytes:
         url: str = Spotify._url("me/player/previous")
-        return self._request("POST", url)
+        return self._player_request("POST", url)
 
     def next(self) -> bytes:
         url: str = Spotify._url("me/player/next")
-        return self._request("POST", url)
+        return self._player_request("POST", url)
