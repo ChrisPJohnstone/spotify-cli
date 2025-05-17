@@ -3,6 +3,8 @@ from argparse import ArgumentParser, Namespace
 
 
 class Command(ABC):
+    DESCRIPTION: str
+
     @staticmethod
     @abstractmethod
     def parent_parsers() -> list[ArgumentParser]:  # pragma: no cover

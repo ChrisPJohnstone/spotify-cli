@@ -4,6 +4,8 @@ from ._get_top import GetTop
 
 
 class GetTopTracks(GetTop):
+    DESCRIPTION: str = "Get your top tracks"
+
     @property
     def item_type(self) -> str:  # pragma: no cover
         return "tracks"

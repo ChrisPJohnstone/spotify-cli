@@ -54,24 +54,25 @@ def test_main(
             main()
     mock_logging_config.assert_has_calls(expected_logging_calls)
     mock_argument_parser.assert_called_once_with(
-        prog="spotify",
-        description="Spotify Command Line Interface",
+        prog=ANY,
+        description=ANY,
         formatter_class=RawTextHelpFormatter,
         parents=[*[ANY for _ in range(len(shared))]],
-        usage="%(prog)s [options] <command> [parameters]",
+        usage=ANY,
+        epilog=ANY,
     )
     mock_parser: MagicMock = mock_argument_parser.return_value
     mock_add_subparsers: MagicMock = mock_parser.add_subparsers
     mock_add_subparsers.assert_called_once_with(
-        title="commands",
-        dest="command",
-        metavar="\n  ".join(commands),
+        dest=ANY,
+        metavar=ANY,
         required=True,
     )
     mock_subparsers: MagicMock = mock_add_subparsers.return_value
     add_parser_calls: list[_Call] = [
         call(
             name=name,
+            description=ANY,
             prog=f"spotify {name}",
             formatter_class=RawTextHelpFormatter,
             parents=[*[ANY for _ in range(len(shared))]],

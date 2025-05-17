@@ -9,6 +9,8 @@ from src.type_definitions import JSONObject
 
 
 class GetSavedTracks(Command):
+    DESCRIPTION: str = "Get your saved tracks"
+
     DEFAULT_LIMIT: int = 20
     DEFAULT_OFFSET: int = 0
     MAX_PER_REQUEST: int = 50

@@ -5,6 +5,8 @@ from src.spotify import Spotify
 
 
 class PlayerPrevious(Command):
+    DESCRIPTION: str = "Move to the previous song in queue"
+
     @staticmethod
     def parent_parsers() -> list[ArgumentParser]:
         return []

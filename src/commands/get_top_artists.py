@@ -4,6 +4,8 @@ from ._get_top import GetTop
 
 
 class GetTopArtists(GetTop):
+    DESCRIPTION: str = "Get your top artists"
+
     @property
     def item_type(self) -> str:  # pragma: no cover
         return "artists"

@@ -28,10 +28,13 @@ COMMANDS: dict[str, type[Command]] = {
 
 
 def _epilog() -> str:
+    max_command_len: int = max(map(len, COMMANDS.keys())) + 4
     join_string: str = "\n  "
-    commands: str = join_string.join(COMMANDS.keys())
-    # TODO: Add help strings to this
-    return f"commands:{join_string}{commands}"
+    commands: list[str] = [
+        f"{name:<{max_command_len}}{command.DESCRIPTION}"
+        for name, command in COMMANDS.items()
+    ]
+    return f"commands:{join_string}{join_string.join(commands)}"
 
 
 def main() -> None:
@@ -52,6 +55,7 @@ def main() -> None:
     for name, command in COMMANDS.items():
         subparsers.add_parser(
             name=name,
+            description=command.DESCRIPTION,
             prog=f"spotify {name}",
             formatter_class=RawTextHelpFormatter,
             parents=[*shared, *command.parent_parsers()],

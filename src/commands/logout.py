@@ -5,6 +5,8 @@ from src.spotify import Spotify
 
 
 class LogOut(Command):
+    DESCRIPTION: str = "Clear cache so log in is required for future requests"
+
     @staticmethod
     def parent_parsers() -> list[ArgumentParser]:
         return []
