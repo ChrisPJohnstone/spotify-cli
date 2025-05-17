@@ -1,4 +1,5 @@
 from ._base import Command
+from .get_devices import GetDevices
 from .get_saved_tracks import GetSavedTracks
 from .get_top_artists import GetTopArtists
 from .get_top_tracks import GetTopTracks

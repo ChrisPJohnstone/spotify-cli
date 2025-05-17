@@ -8,6 +8,7 @@ from logging import DEBUG, basicConfig
 
 from src.commands import (
     Command,
+    GetDevices,
     GetSavedTracks,
     GetTopArtists,
     GetTopTracks,
@@ -18,6 +19,7 @@ from src.commands import (
 from src.parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
+    "devices": GetDevices,
     "logout": LogOut,
     "next": PlayerNext,
     "previous": PlayerPrevious,
@@ -66,5 +68,5 @@ def main() -> None:
     COMMANDS[args.command](args)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()

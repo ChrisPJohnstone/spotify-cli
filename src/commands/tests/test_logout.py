@@ -1,7 +1,7 @@
 from argparse import Namespace
 from unittest.mock import MagicMock, call, patch
 
-from src.commands.logout import LogOut
+from src.commands import LogOut
 
 FILEPATH: str = "src.commands.logout"
 

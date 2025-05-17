@@ -1,7 +1,7 @@
 from argparse import Namespace
 from unittest.mock import MagicMock, call, patch
 
-from src.commands.player_previous import PlayerPrevious
+from src.commands import PlayerPrevious
 
 FILEPATH: str = "src.commands.player_previous"
 

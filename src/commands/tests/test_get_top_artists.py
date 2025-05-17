@@ -1,7 +1,7 @@
 from argparse import Namespace
 from unittest.mock import _Call, MagicMock, call, patch
 
-from src.commands.get_top_artists import GetTopArtists
+from src.commands import GetTopArtists
 from src.type_definitions import JSONObject
 from test_utils import TestSet, parametrize
 

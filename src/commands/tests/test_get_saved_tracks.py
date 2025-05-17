@@ -1,7 +1,7 @@
 from argparse import Namespace
 from unittest.mock import _Call, MagicMock, PropertyMock, call, patch
 
-from src.commands.get_saved_tracks import GetSavedTracks
+from src.commands import GetSavedTracks
 from src.type_definitions import JSONObject
 from test_utils import TestSet, parametrize
 

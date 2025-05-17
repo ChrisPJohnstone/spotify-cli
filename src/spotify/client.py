@@ -28,6 +28,7 @@ class Spotify:
         # https://developer.spotify.com/documentation/web-api/concepts/scopes
         "user-library-read",
         "user-modify-playback-state",
+        "user-read-playback-state",
         "user-top-read",
     ]
 
@@ -210,9 +211,12 @@ class Spotify:
         params: dict[str, int] = {"limit": limit, "offset": offset}
         url: str = Spotify._url(f"me/tracks", params)
         response: bytes = self._request("GET", url)
-        tracks: JSONObject = json.loads(response)
-        for item in tracks["items"]:
-            yield item
+        yield from json.loads(response)["items"]
+
+    def get_devices(self) -> Iterator[JSONObject]:
+        url: str = Spotify._url(f"me/player/devices")
+        response: bytes = self._request("GET", url)
+        yield from json.loads(response)["devices"]
 
     def previous(self) -> bytes:
         url: str = Spotify._url("me/player/previous")
