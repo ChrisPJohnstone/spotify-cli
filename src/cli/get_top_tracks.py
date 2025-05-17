@@ -4,7 +4,12 @@ from ._get_top import GetTop
 
 
 class GetTopTracks(GetTop):
+    @property
+    def item_type(self) -> str:
+        return "tracks"
+
     def __init__(self, args: Namespace) -> None:
-        for rank, track in self._results(args, "tracks"):
+        self._args: Namespace = args
+        for rank, track in self._results():
             artists: list[str] = [artist["name"] for artist in track["artists"]]
             print(rank, track["name"], "by", ",".join(artists))

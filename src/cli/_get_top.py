@@ -26,22 +26,29 @@ class GetTop(Command):
             ),
         ]
 
+    @property
+    def args(self) -> Namespace:
+        if not hasattr(self, "_args"):
+            raise ValueError("_args must be set by init")
+        return self._args  # type: ignore
+
+    @property
+    @abstractmethod
+    def item_type(self) -> str:
+        pass
+
     @abstractmethod
     def __init__(self, args: Namespace) -> None:
         pass
 
-    def _results(
-        self,
-        args: Namespace,
-        item_type: str,
-    ) -> Iterator[tuple[int, JSONObject]]:
+    def _results(self) -> Iterator[tuple[int, JSONObject]]:
         client: Spotify = Spotify()
         for n in range(
-            args.offset,
-            args.number + args.offset,
+            self.args.offset,
+            self.args.number + self.args.offset,
             GetTop.MAX_PER_REQUEST,
         ):
-            remaining: int = args.number + args.offset - n
+            remaining: int = self.args.number + self.args.offset - n
             limit: int = min(remaining, GetTop.MAX_PER_REQUEST)
-            logging.debug(f"Requesting {item_type} {n}-{limit}")
-            yield from client.get_top(item_type, args.term, limit, n)
+            logging.debug(f"Requesting {self.item_type} {n}-{limit + n}")
+            yield from client.get_top(self.item_type, self.args.term, limit, n)
