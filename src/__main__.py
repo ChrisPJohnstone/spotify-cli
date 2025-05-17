@@ -6,13 +6,13 @@ from argparse import (
 )
 from logging import DEBUG, basicConfig
 
-from .commands._base import Command
-from .commands.get_saved_tracks import GetSavedTracks
-from .commands.get_top_artists import GetTopArtists
-from .commands.get_top_tracks import GetTopTracks
-from .commands.logout import LogOut
-from .commands.player_next import PlayerNext
-from .commands.player_previous import PlayerPrevious
+from src.commands._base import Command
+from src.commands.get_saved_tracks import GetSavedTracks
+from src.commands.get_top_artists import GetTopArtists
+from src.commands.get_top_tracks import GetTopTracks
+from src.commands.logout import LogOut
+from src.commands.player_next import PlayerNext
+from src.commands.player_previous import PlayerPrevious
 from src.parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
