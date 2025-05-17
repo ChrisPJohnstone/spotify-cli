@@ -1,6 +1,6 @@
 # Overview
 
-CLI interface for Spotify using only python standard library.
+Command Line Interface for Spotify using only python standard library.
 
 Uses [PKCE Authorization Flow](https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow)
 
