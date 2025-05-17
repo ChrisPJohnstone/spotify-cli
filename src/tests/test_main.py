@@ -55,7 +55,7 @@ def test_main(
     mock_logging_config.assert_has_calls(expected_logging_calls)
     mock_argument_parser.assert_called_once_with(
         prog="spotify",
-        description="Spotify CLI Interface",
+        description="Spotify Command Line Interface",
         formatter_class=RawTextHelpFormatter,
         parents=[*[ANY for _ in range(len(shared))]],
         usage="%(prog)s [options] <command> [parameters]",

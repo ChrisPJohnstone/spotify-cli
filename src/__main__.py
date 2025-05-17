@@ -28,7 +28,7 @@ COMMANDS: dict[str, type[Command]] = {
 def main() -> None:
     parser: ArgumentParser = ArgumentParser(
         prog="spotify",
-        description="Spotify CLI Interface",
+        description="Spotify Command Line Interface",
         formatter_class=RawTextHelpFormatter,
         parents=[parser(True) for parser in SHARED],
         usage="%(prog)s [options] <command> [parameters]",
