@@ -4,7 +4,7 @@ from argparse import (
     RawTextHelpFormatter,
     _SubParsersAction,
 )
-import logging
+from logging import DEBUG, basicConfig
 
 from ._base import Command
 from .get_saved_tracks import GetSavedTracks
@@ -47,5 +47,5 @@ def main() -> None:
         )
     args: Namespace = parser.parse_args()
     if getattr(args, "verbose", False):
-        logging.basicConfig(level=logging.DEBUG)
+        basicConfig(level=DEBUG)
     COMMANDS[args.command](args)
