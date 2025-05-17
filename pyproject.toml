@@ -13,7 +13,7 @@ requires-python = ">=3.13.0"
   email = "chrispjohnstone97@gmail.com"
 
   [project.scripts]
-  spotify = "src.cli:main"
+  spotify = "src.__main__:main"
 
 [tool.setuptools.packages.find]
 include = ["*"]

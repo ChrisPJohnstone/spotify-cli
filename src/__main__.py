@@ -6,13 +6,13 @@ from argparse import (
 )
 from logging import DEBUG, basicConfig
 
-from ._base import Command
-from .get_saved_tracks import GetSavedTracks
-from .get_top_artists import GetTopArtists
-from .get_top_tracks import GetTopTracks
-from .logout import LogOut
-from .player_next import PlayerNext
-from .player_previous import PlayerPrevious
+from .cli._base import Command
+from .cli.get_saved_tracks import GetSavedTracks
+from .cli.get_top_artists import GetTopArtists
+from .cli.get_top_tracks import GetTopTracks
+from .cli.logout import LogOut
+from .cli.player_next import PlayerNext
+from .cli.player_previous import PlayerPrevious
 from src.parsers import SHARED
 
 COMMANDS: dict[str, type[Command]] = {
@@ -38,6 +38,7 @@ def main() -> None:
         dest="command",
         metavar="\n  ".join(COMMANDS.keys()),
         # TODO: Add help strings to this
+        # TODO: When you run app without args these all list as required
         required=True,
     )
     shared: list[ArgumentParser] = [parser() for parser in SHARED]
@@ -52,3 +53,7 @@ def main() -> None:
     if getattr(args, "verbose", False):
         basicConfig(level=DEBUG)
     COMMANDS[args.command](args)
+
+
+if __name__ == "__main__":
+    main()
