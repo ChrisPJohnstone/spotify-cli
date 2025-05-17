@@ -60,6 +60,11 @@ class Spotify:
         return output
 
     def get_auth_code(self) -> None:
+        """
+        1. Starts server which is waiting for an auth code to be sent to it
+        2. Opens spotify authentication in a browser
+        3. Once you authenticate in browser it'll send auth code to server
+        """
         server: AuthServer = AuthServer(Spotify.REDIRECT_URI)
         webbrowser.open(self.auth_url())
         print("Go to your browser to authenticate")
