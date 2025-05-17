@@ -16,7 +16,7 @@ requires-python = ">=3.13.0"
   spotify = "src.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["*"]
+where = ["src"]
 exclude = ["*tests*"]
 namespaces = true
 
