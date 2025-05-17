@@ -28,7 +28,7 @@ COMMANDS: dict[str, type[Command]] = {
 def main() -> None:
     parser: ArgumentParser = ArgumentParser(
         prog="spotify",
-        description="Spotify CLI Interface (very unfinished)",
+        description="Spotify CLI Interface",
         formatter_class=RawTextHelpFormatter,
         parents=[parser(True) for parser in SHARED],
         usage="%(prog)s [options] <command> [parameters]",
@@ -36,7 +36,7 @@ def main() -> None:
     subparsers: _SubParsersAction = parser.add_subparsers(
         title="commands",
         dest="command",
-        metavar=f"{'\n  '.join(COMMANDS.keys())}",
+        metavar="\n  ".join(COMMANDS.keys()),
         # TODO: Add help strings to this
         required=True,
     )
