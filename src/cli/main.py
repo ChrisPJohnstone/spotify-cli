@@ -30,6 +30,7 @@ def main() -> None:
         description="Spotify CLI Interface (very unfinished)",
         formatter_class=RawTextHelpFormatter,
         parents=[parser(True) for parser in SHARED],
+        usage="%(prog)s [options] <command> [parameters]",
     )
     subparsers: _SubParsersAction = parser.add_subparsers(
         title="commands",
