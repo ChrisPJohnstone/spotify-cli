@@ -25,6 +25,13 @@ COMMANDS: dict[str, type[Command]] = {
 }
 
 
+def _epilog() -> str:
+    join_string: str = "\n  "
+    commands: str = join_string.join(COMMANDS.keys())
+    # TODO: Add help strings to this
+    return f"commands:{join_string}{commands}"
+
+
 def main() -> None:
     parser: ArgumentParser = ArgumentParser(
         prog="spotify",
@@ -32,13 +39,11 @@ def main() -> None:
         formatter_class=RawTextHelpFormatter,
         parents=[parser(True) for parser in SHARED],
         usage="%(prog)s [options] <command> [parameters]",
+        epilog=_epilog(),
     )
     subparsers: _SubParsersAction = parser.add_subparsers(
-        title="commands",
         dest="command",
-        metavar="\n  ".join(COMMANDS.keys()),
-        # TODO: Add help strings to this
-        # TODO: When you run app without args these all list as required
+        metavar="command",
         required=True,
     )
     shared: list[ArgumentParser] = [parser() for parser in SHARED]
