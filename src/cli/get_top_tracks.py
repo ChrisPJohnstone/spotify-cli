@@ -12,4 +12,4 @@ class GetTopTracks(GetTop):
         self._args: Namespace = args
         for rank, track in self._results():
             artists: list[str] = [artist["name"] for artist in track["artists"]]
-            print(rank, track["name"], "by", ",".join(artists))
+            print(rank, track["name"], "by", ", ".join(artists))
