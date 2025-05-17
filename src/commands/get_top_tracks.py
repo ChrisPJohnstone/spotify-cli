@@ -12,6 +12,8 @@ class GetTopTracks(GetTop):
 
     def __init__(self, args: Namespace) -> None:
         self._args: Namespace = args
+        max_rank_len: int = len(str(args.number + args.offset))
         for rank, track in self._results():
+            rank_string: str = f"{rank:0{max_rank_len}d}"
             artists: list[str] = [artist["name"] for artist in track["artists"]]
-            print(rank, track["name"], "by", ", ".join(artists))
+            print(f"{rank_string} {track['name']:<50}{', '.join(artists)}")

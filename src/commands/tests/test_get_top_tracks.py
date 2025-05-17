@@ -18,7 +18,7 @@ init_tests: TestSet = {
             ),
         ],
         "expected_print_calls": [
-            call(1, "May Sinde", "by", "Tropavibes, Val Ortiz"),
+            call(f"1 {'May Sinde':<50}Tropavibes, Val Ortiz"),
         ],
     },
     "multi": {
@@ -36,8 +36,8 @@ init_tests: TestSet = {
             ),
         ],
         "expected_print_calls": [
-            call(1, "May Sinde", "by", "Tropavibes, Val Ortiz"),
-            call(2, "Red Kingdom", "by", "Tech N9ne"),
+            call(f"1 {'May Sinde':<50}Tropavibes, Val Ortiz"),
+            call(f"2 {'Red Kingdom':<50}Tech N9ne"),
         ],
     },
 }
@@ -53,5 +53,5 @@ def test_init(
     expected_print_calls: list[_Call],
 ) -> None:
     mock_results.return_value = results
-    GetTopTracks(Namespace())
+    GetTopTracks(Namespace(number=1, offset=0))
     mock_print.assert_has_calls(expected_print_calls)
