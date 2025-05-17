@@ -7,10 +7,8 @@ Uses [PKCE Authorization Flow](https://developer.spotify.com/documentation/web-a
 # Usage
 
 - You can install package with `pip install .` which will create `spotify` command in your shell
-- You can run without installing using by running [app](app)
-    Replace `spotify` with `./app` or `python3 app` in examples. Example:
-        `./app top-tracks`
-        `./app -v next`
+- You can run without installing using by running [app](app)\
+    Replace `spotify` with `./app` or `python3 app` in examples. Example: `./app top-tracks`
 - Get further usage information with `spotify -h`
 - Player commands can only control existing sessions (e.g. listening on mobile)
 
