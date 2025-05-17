@@ -8,12 +8,14 @@ Uses [PKCE Authorization Flow](https://developer.spotify.com/documentation/web-a
 
 - Install package with `pip install .`
 - Get further usage information with `spotify -h`
+- Player commands can only control existing sessions (e.g. listening on mobile)
 
 ## Examples
 
 - `spotify top-tracks` Will get your 20 top tracks for the last 6 months
 - `spotify top-tracks --term short_term -n 10 --offset 10` Will get your 11th-20th top tracks for the last 4 weeks
-- `spotify top-artists` Will get your 20 top artists for the last 6 months
+- `spotify saved-tracks` Will get your 20 most recently saved tracks
+- `spotify next` Will skip the current song
 
 # Links
 

@@ -25,6 +25,8 @@ class Spotify:
     MAX_ATTEMPTS: int = 3
     SCOPE: list[str] = [
         # https://developer.spotify.com/documentation/web-api/concepts/scopes
+        "user-library-read",
+        "user-modify-playback-state",
         "user-top-read",
     ]
 
@@ -191,3 +193,11 @@ class Spotify:
         tracks: JSONObject = json.loads(response)
         for item in tracks["items"]:
             yield item
+
+    def previous(self) -> bytes:
+        url: str = Spotify._url("me/player/previous")
+        return self._request("POST", url)
+
+    def next(self) -> bytes:
+        url: str = Spotify._url("me/player/next")
+        return self._request("POST", url)
