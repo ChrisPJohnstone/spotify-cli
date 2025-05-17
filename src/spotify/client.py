@@ -129,6 +129,13 @@ class Spotify:
             }
         self._get_access_token(payload)
 
+    @staticmethod
+    def _url(suffix: str, query: JSONObject | None = None) -> str:
+        url: str = f"{Spotify.BASE_URL}{suffix}"
+        if query is None:
+            return url
+        return f"{url}?{urlencode(query)}"
+
     def _request(
         self,
         method: str,
@@ -166,7 +173,7 @@ class Spotify:
             "limit": limit,
             "offset": offset,
         }
-        url: str = f"{Spotify.BASE_URL}me/top/{item_type}?{urlencode(params)}"
+        url: str = Spotify._url(f"me/top/{item_type}", params)
         response: bytes = self._request("GET", url)
         tracks: JSONObject = json.loads(response)
         rank: int = offset + 1
@@ -179,7 +186,7 @@ class Spotify:
         offset: int = 0,
     ) -> Iterator[JSONObject]:
         params: dict[str, int] = {"limit": limit, "offset": offset}
-        url: str = f"{Spotify.BASE_URL}me/tracks?{urlencode(params)}"
+        url: str = Spotify._url(f"me/tracks", params)
         response: bytes = self._request("GET", url)
         tracks: JSONObject = json.loads(response)
         for item in tracks["items"]:
