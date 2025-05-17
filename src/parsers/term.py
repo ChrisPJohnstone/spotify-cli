@@ -10,9 +10,9 @@ def term(default: str, help_string: str) -> ArgumentParser:
         default=default,
         help=(
             f"{help_string} (Default: {default})\n"
-            "- short_term   4 weeks\n"
-            "- medium_term  6 months\n"
-            "- long_term    1 year\n"
+            "  short_term   4 weeks\n"
+            "  medium_term  6 months\n"
+            "  long_term    1 year"
         ),
     )
     return parser
