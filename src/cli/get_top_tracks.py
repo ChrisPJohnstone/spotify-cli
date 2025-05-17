@@ -5,7 +5,7 @@ from ._get_top import GetTop
 
 class GetTopTracks(GetTop):
     @property
-    def item_type(self) -> str:
+    def item_type(self) -> str:  # pragma: no cover
         return "tracks"
 
     def __init__(self, args: Namespace) -> None:

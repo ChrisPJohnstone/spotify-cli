@@ -5,7 +5,7 @@ from ._get_top import GetTop
 
 class GetTopArtists(GetTop):
     @property
-    def item_type(self) -> str:
+    def item_type(self) -> str:  # pragma: no cover
         return "artists"
 
     def __init__(self, args: Namespace) -> None:

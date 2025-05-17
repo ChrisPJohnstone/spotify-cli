@@ -27,18 +27,18 @@ class GetTop(Command):
         ]
 
     @property
-    def args(self) -> Namespace:
+    def args(self) -> Namespace:  # pragma: no cover
         if not hasattr(self, "_args"):
             raise ValueError("_args must be set by init")
         return self._args  # type: ignore
 
     @property
     @abstractmethod
-    def item_type(self) -> str:
+    def item_type(self) -> str:  # pragma: no cover
         pass
 
     @abstractmethod
-    def __init__(self, args: Namespace) -> None:
+    def __init__(self, args: Namespace) -> None:  # pragma: no cover
         pass
 
     def _results(self) -> Iterator[tuple[int, JSONObject]]:
