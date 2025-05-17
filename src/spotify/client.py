@@ -16,7 +16,7 @@ from src.type_definitions import JSONObject
 
 
 class Spotify:
-    CACHE_DIR: Path = Path.home() / ".cache" / "spotify-cli"
+    CACHE_DIR: Path = Path.home() / ".cache" / "spotify-commands"
     CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     REDIRECT_URI: str = "http://127.0.0.1:8080"
     AUTH_URL: str = "https://accounts.spotify.com/authorize"

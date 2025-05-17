@@ -1,9 +1,9 @@
 from argparse import Namespace
 from unittest.mock import MagicMock, call, patch
 
-from src.cli.player_previous import PlayerPrevious
+from src.commands.player_previous import PlayerPrevious
 
-FILEPATH: str = "src.cli.player_previous"
+FILEPATH: str = "src.commands.player_previous"
 
 
 def test_parent_parsers() -> None:
