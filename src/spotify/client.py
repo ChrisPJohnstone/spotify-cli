@@ -11,9 +11,8 @@ import json
 import logging
 import webbrowser
 
-from .auth_server import AuthServer
 from type_definitions import JSONObject
-from utils import Cache
+from utils import AuthServer, Cache
 
 
 class Spotify:
