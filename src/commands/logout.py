@@ -12,4 +12,4 @@ class LogOut(Command):
         return []
 
     def __init__(self, _: Namespace) -> None:
-        Spotify().clear_cache()
+        Spotify().cache.clear()

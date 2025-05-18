@@ -2,7 +2,6 @@ from base64 import urlsafe_b64encode
 from collections.abc import Iterator
 from hashlib import sha256
 from http.client import HTTPResponse
-from pathlib import Path
 from random import choice
 from string import ascii_letters, digits
 from urllib.parse import urlencode
@@ -14,10 +13,10 @@ import webbrowser
 
 from .auth_server import AuthServer
 from type_definitions import JSONObject
+from utils import Cache
 
 
 class Spotify:
-    CACHE_DIR: Path = Path.home() / ".cache" / "spotify-commands"
     CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     REDIRECT_URI: str = "http://127.0.0.1:8080"
     AUTH_URL: str = "https://accounts.spotify.com/authorize"
@@ -31,6 +30,13 @@ class Spotify:
         "user-read-playback-state",
         "user-top-read",
     ]
+
+    def __init__(self) -> None:
+        self._cache: Cache = Cache()
+
+    @property
+    def cache(self) -> Cache:
+        return self._cache
 
     def generate_code_verifier(self, length: int = 128) -> None:
         letters: str = ascii_letters + digits
@@ -73,36 +79,6 @@ class Spotify:
         server.handle_request()
         self._auth_code: str = server._auth_code
 
-    @property
-    def cache_path(self) -> Path:
-        Spotify.CACHE_DIR.mkdir(parents=True, exist_ok=True)
-        return Spotify.CACHE_DIR / "auth.txt"
-
-    def clear_cache(self) -> None:
-        if not self.cache_path.is_file():
-            return
-        logging.debug(f"Deleting {self.cache_path}")
-        self.cache_path.unlink()
-
-    def read_cache(self) -> dict[str, str]:
-        if not self.cache_path.is_file():
-            return {}
-        logging.debug(f"Reading {self.cache_path}")
-        cache: str = self.cache_path.read_text()
-        if len(cache) == 0:
-            return {}
-        return json.loads(cache)
-
-    def write_cache(self, content: dict[str, str]) -> None:
-        if not self.cache_path.is_file():
-            self.cache_path.touch(exist_ok=True)
-        logging.debug(f"Updating {self.cache_path} with {content}")
-        new_cache: dict[str, str] = {
-            **self.read_cache(),
-            **content,
-        }
-        self.cache_path.write_text(json.dumps(new_cache))
-
     def _get_access_token(self, payload: dict[str, str]) -> None:
         logging.debug(f"Requesting new access token with payload {payload}")
         request: Request = Request(
@@ -115,11 +91,11 @@ class Spotify:
         response_data: JSONObject = json.loads(response.read())
         if "access_token" not in response_data:
             raise Exception(f"Authentication failed: {response_data}")
-        self.write_cache({"refresh_token": response_data["refresh_token"]})
+        self.cache.write({"refresh_token": response_data["refresh_token"]})
         self._access_token: str = response_data["access_token"]
 
     def get_access_token(self) -> None:
-        cache: dict[str, str] = self.read_cache()
+        cache: dict[str, str] = self.cache.read()
         if "refresh_token" in cache:
             payload: dict[str, str] = {
                 "client_id": Spotify.CLIENT_ID,

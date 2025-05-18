@@ -13,4 +13,4 @@ def test_parent_parsers() -> None:
 @patch(f"{FILEPATH}.Spotify")
 def test_init(mock_spotify: MagicMock) -> None:
     LogOut(Namespace())
-    mock_spotify.assert_has_calls([call(), call().clear_cache()])
+    mock_spotify.assert_has_calls([call(), call().cache.clear()])
