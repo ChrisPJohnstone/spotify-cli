@@ -14,6 +14,7 @@ from utils import AuthServer, Cache
 
 
 class AuthPKCE:
+    CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     REDIRECT_URI: str = "http://127.0.0.1:8080"
     AUTH_URL: str = "https://accounts.spotify.com/authorize"
     TOKEN_URL: str = "https://accounts.spotify.com/api/token"
@@ -25,13 +26,8 @@ class AuthPKCE:
         "user-top-read",
     ]
 
-    def __init__(self, client_id: str, cache: Cache) -> None:
-        self._client_id: str = client_id
+    def __init__(self, cache: Cache) -> None:
         self._cache: Cache = cache
-
-    @property
-    def client_id(self) -> str:
-        return self._client_id
 
     @property
     def cache(self) -> Cache:
@@ -55,7 +51,7 @@ class AuthPKCE:
         if not hasattr(self, "_code_challenge"):
             self.generate_code_challenge()
         payload: dict[str, str] = {
-            "client_id": self.client_id,
+            "client_id": AuthPKCE.CLIENT_ID,
             "redirect_uri": AuthPKCE.REDIRECT_URI,
             "code_challenge": self._code_challenge,
             "code_challenge_method": "S256",
@@ -97,7 +93,7 @@ class AuthPKCE:
         cache: dict[str, str] = self.cache.read()
         if "refresh_token" in cache:
             payload: dict[str, str] = {
-                "client_id": self.client_id,
+                "client_id": AuthPKCE.CLIENT_ID,
                 "grant_type": "refresh_token",
                 "refresh_token": cache["refresh_token"],
             }
@@ -105,7 +101,7 @@ class AuthPKCE:
             if not hasattr(self, "_auth_code"):
                 self.get_auth_code()
             payload: dict[str, str] = {
-                "client_id": self.client_id,
+                "client_id": AuthPKCE.CLIENT_ID,
                 "redirect_uri": AuthPKCE.REDIRECT_URI,
                 "code": self._auth_code,
                 "code_verifier": self._code_verifier,

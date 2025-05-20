@@ -12,13 +12,12 @@ from utils import Cache
 
 
 class Spotify:
-    CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
     BASE_URL: str = "https://api.spotify.com/v1/"
     MAX_ATTEMPTS: int = 3
 
     def __init__(self) -> None:
         self._cache: Cache = Cache()
-        self._auth_handler: AuthPKCE = AuthPKCE(Spotify.CLIENT_ID, self.cache)
+        self._auth_handler: AuthPKCE = AuthPKCE(self.cache)
 
     @property
     def cache(self) -> Cache:
