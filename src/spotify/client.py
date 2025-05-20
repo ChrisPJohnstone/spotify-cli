@@ -6,7 +6,7 @@ from urllib.error import HTTPError
 import json
 import logging
 
-from .auth import AuthPKCE
+from .auth import SpotifyAuth, SpotifyAuthPKCE
 from type_definitions import JSONObject
 from utils import Cache
 
@@ -17,14 +17,14 @@ class Spotify:
 
     def __init__(self) -> None:
         self._cache: Cache = Cache()
-        self._auth_handler: AuthPKCE = AuthPKCE(self.cache)
+        self._auth_handler: SpotifyAuth = SpotifyAuthPKCE(self.cache)
 
     @property
     def cache(self) -> Cache:
         return self._cache
 
     @property
-    def auth_handler(self) -> AuthPKCE:
+    def auth_handler(self) -> SpotifyAuth:
         return self._auth_handler
 
     def get_access_token(self) -> None:

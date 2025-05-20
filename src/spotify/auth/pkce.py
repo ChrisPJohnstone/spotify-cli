@@ -9,30 +9,12 @@ import json
 import logging
 import webbrowser
 
+from ._base import SpotifyAuth
 from type_definitions import JSONObject
-from utils import AuthServer, Cache
+from utils import AuthServer
 
 
-class AuthPKCE:
-    CLIENT_ID: str = "b37fc55dfdd8409db2411464ba60ef5e"
-    REDIRECT_URI: str = "http://127.0.0.1:8080"
-    AUTH_URL: str = "https://accounts.spotify.com/authorize"
-    TOKEN_URL: str = "https://accounts.spotify.com/api/token"
-    SCOPE: list[str] = [
-        # https://developer.spotify.com/documentation/web-api/concepts/scopes
-        "user-library-read",
-        "user-modify-playback-state",
-        "user-read-playback-state",
-        "user-top-read",
-    ]
-
-    def __init__(self, cache: Cache) -> None:
-        self._cache: Cache = cache
-
-    @property
-    def cache(self) -> Cache:
-        return self._cache
-
+class SpotifyAuthPKCE(SpotifyAuth):
     def generate_code_verifier(self, length: int = 128) -> None:
         letters: str = ascii_letters + digits
         constructor: list[str] = [choice(letters) for _ in range(length)]
@@ -51,14 +33,14 @@ class AuthPKCE:
         if not hasattr(self, "_code_challenge"):
             self.generate_code_challenge()
         payload: dict[str, str] = {
-            "client_id": AuthPKCE.CLIENT_ID,
-            "redirect_uri": AuthPKCE.REDIRECT_URI,
+            "client_id": SpotifyAuthPKCE.CLIENT_ID,
+            "redirect_uri": SpotifyAuthPKCE.REDIRECT_URI,
             "code_challenge": self._code_challenge,
             "code_challenge_method": "S256",
             "response_type": "code",
-            "scope": " ".join(AuthPKCE.SCOPE),
+            "scope": " ".join(SpotifyAuthPKCE.SCOPE),
         }
-        output: str = f"{AuthPKCE.AUTH_URL}?{urlencode(payload)}"
+        output: str = f"{SpotifyAuthPKCE.AUTH_URL}?{urlencode(payload)}"
         logging.debug(f"Auth url: {output}")
         return output
 
@@ -68,7 +50,7 @@ class AuthPKCE:
         2. Opens spotify authentication in a browser
         3. Once you authenticate in browser it'll send auth code to server
         """
-        server: AuthServer = AuthServer(AuthPKCE.REDIRECT_URI)
+        server: AuthServer = AuthServer(SpotifyAuthPKCE.REDIRECT_URI)
         webbrowser.open(self.auth_url())
         print("Go to your browser to authenticate")
         server.handle_request()
@@ -78,7 +60,7 @@ class AuthPKCE:
         logging.debug(f"Requesting new access token with payload {payload}")
         request: Request = Request(
             method="POST",
-            url=AuthPKCE.TOKEN_URL,
+            url=SpotifyAuthPKCE.TOKEN_URL,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             data=urlencode(payload).encode(),
         )
@@ -93,7 +75,7 @@ class AuthPKCE:
         cache: dict[str, str] = self.cache.read()
         if "refresh_token" in cache:
             payload: dict[str, str] = {
-                "client_id": AuthPKCE.CLIENT_ID,
+                "client_id": SpotifyAuthPKCE.CLIENT_ID,
                 "grant_type": "refresh_token",
                 "refresh_token": cache["refresh_token"],
             }
@@ -101,8 +83,8 @@ class AuthPKCE:
             if not hasattr(self, "_auth_code"):
                 self.get_auth_code()
             payload: dict[str, str] = {
-                "client_id": AuthPKCE.CLIENT_ID,
-                "redirect_uri": AuthPKCE.REDIRECT_URI,
+                "client_id": SpotifyAuthPKCE.CLIENT_ID,
+                "redirect_uri": SpotifyAuthPKCE.REDIRECT_URI,
                 "code": self._auth_code,
                 "code_verifier": self._code_verifier,
                 "grant_type": "authorization_code",
