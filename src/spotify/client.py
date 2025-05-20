@@ -32,28 +32,29 @@ class Spotify:
         self._access_token: str = self.auth_handler.get_access_token()
 
     @staticmethod
-    def _url(suffix: str, query: JSONObject | None = None) -> str:
+    def _url(suffix: str, parameters: JSONObject | None = None) -> str:
         url: str = f"{Spotify.BASE_URL}{suffix}"
-        if query is None:
+        if parameters is None:
             return url
-        return f"{url}?{urlencode(query)}"
+        return f"{url}?{urlencode(parameters)}"
 
     def _request(
         self,
         method: str,
         url: str,
-        body: bytes | str | None = None,
+        parameters: JSONObject | None = None,
+        data: bytes | str | None = None,
         attempts: int = 0,
     ) -> bytes:
         if attempts == Spotify.MAX_ATTEMPTS:
             raise Exception(f"Reached max attempts for {method} {url}")
         if not hasattr(self, "_access_token"):
             self.get_access_token()
-        logging.debug(f"Sending {method} request to {url} with {body}")
+        logging.debug(f"Sending {method} request to {url} with {data}")
         request: Request = Request(
             method=method,
-            url=url,
-            data=body.encode() if isinstance(body, str) else body,
+            url=Spotify._url(url, parameters),
+            data=data.encode() if isinstance(data, str) else data,
             headers={"Authorization": f"Bearer {self._access_token}"},
         )
         response: HTTPResponse = urlopen(request)
@@ -67,11 +68,11 @@ class Spotify:
         self,
         method: str,
         url: str,
-        body: bytes | str | None = None,
-        attempts: int = 0,
+        parameters: JSONObject | None = None,
+        data: bytes | str | None = None,
     ) -> bytes:
         try:
-            return self._request(method, url, body, attempts)
+            return self._request(method, url, parameters, data)
         except HTTPError:
             raise NotImplementedError("Device not found: Please specify device")
 
@@ -82,13 +83,14 @@ class Spotify:
         limit: int = 20,
         offset: int = 0,
     ) -> Iterator[tuple[int, JSONObject]]:
-        params: dict[str, str | int] = {
+        method: str = "GET"
+        url: str = f"me/top/{item_type}"
+        parameters: dict[str, str | int] = {
             "time_range": term,
             "limit": limit,
             "offset": offset,
         }
-        url: str = Spotify._url(f"me/top/{item_type}", params)
-        response: bytes = self._request("GET", url)
+        response: bytes = self._request(method, url, parameters)
         tracks: JSONObject = json.loads(response)
         rank: int = offset + 1
         for n, item in enumerate(tracks["items"]):
@@ -99,26 +101,30 @@ class Spotify:
         limit: int = 20,
         offset: int = 0,
     ) -> Iterator[JSONObject]:
-        params: dict[str, int] = {"limit": limit, "offset": offset}
-        url: str = Spotify._url(f"me/tracks", params)
-        response: bytes = self._request("GET", url)
+        method: str = "GET"
+        url: str = "me/tracks"
+        parameters: dict[str, int] = {"limit": limit, "offset": offset}
+        response: bytes = self._request(method, url, parameters)
         yield from json.loads(response)["items"]
 
     def get_devices(self) -> Iterator[JSONObject]:
-        url: str = Spotify._url(f"me/player/devices")
-        response: bytes = self._request("GET", url)
+        method: str = "GET"
+        url: str = "me/player/devices"
+        response: bytes = self._request(method, url)
         yield from json.loads(response)["devices"]
 
     def previous(self, device_id: str | None = None) -> bytes:
-        params: dict[str, str] = {}
+        method: str = "POST"
+        url: str = "me/player/previous"
+        parameters: dict[str, str] = {}
         if device_id is not None:
-            params["device_id"] = device_id
-        url: str = Spotify._url("me/player/next", params)
-        return self._player_request("POST", url)
+            parameters["device_id"] = device_id
+        return self._player_request(method, url, parameters)
 
     def next(self, device_id: str | None = None) -> bytes:
-        params: dict[str, str] = {}
+        method: str = "POST"
+        url: str = "me/player/next"
+        parameters: dict[str, str] = {}
         if device_id is not None:
-            params["device_id"] = device_id
-        url: str = Spotify._url("me/player/next", params)
-        return self._player_request("POST", url)
+            parameters["device_id"] = device_id
+        return self._player_request(method, url, parameters)
