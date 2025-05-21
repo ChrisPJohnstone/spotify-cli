@@ -100,7 +100,7 @@ class Spotify:
         response: bytes = self._request(method, url)
         yield from json.loads(response)["devices"]
 
-    def get_device_id(self, device_id: str | None = None) -> str:
+    def _get_device_id(self, device_id: str | None = None) -> str:
         if device_id is not None:
             return device_id
         devices: dict[str, tuple[str, str]] = {}
@@ -114,7 +114,7 @@ class Spotify:
             print(f"{int(n):{digits}d}", device[0])
         device_n: str = user_input(
             prompt=Spotify.CONFIRM_DEVICE_PROMPT,
-            options=devices.keys(),
+            options=list(devices.keys()),
         )
         return devices[device_n][1]
 
@@ -122,7 +122,7 @@ class Spotify:
         method: str = "POST"
         url: str = "me/player/previous"
         parameters: dict[str, str] = {
-            "device_id": self.get_device_id(device_id),
+            "device_id": self._get_device_id(device_id),
         }
         return self._request(method, url, parameters)
 
@@ -130,6 +130,6 @@ class Spotify:
         method: str = "POST"
         url: str = "me/player/next"
         parameters: dict[str, str] = {
-            "device_id": self.get_device_id(device_id),
+            "device_id": self._get_device_id(device_id),
         }
         return self._request(method, url, parameters)
